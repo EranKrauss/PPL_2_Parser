@@ -1,0 +1,88 @@
+(define append 
+   (lambda (lst1 lst2) 
+      (if (eq? lst1 '())
+         lst2
+         (cons (car lst1) (append (cdr lst1) lst2)))))
+
+
+
+(define reverse 
+  (lambda (lst)
+        (if (eq? lst '())
+            '()
+            (append (reverse(cdr lst)) (list(car lst))))
+  )
+)
+(define append-multi
+   (lambda(lst dig times)
+      (if (= times 0)
+          lst
+          (append-multi (append lst (list dig)) dig (- times 1)))
+   )
+)
+
+(define duplicate-items-assist
+   (lambda(lst dup-count acc)
+      (if (eq? lst '()) 
+          acc
+          (if (eq? dup-count '())
+              (append acc lst)
+              (duplicate-items-assist (cdr lst) (cdr dup-count) (append-multi acc (car lst) (car dup-count)))))
+   )
+)
+
+(define duplicate-items
+   (lambda(lst dup-count)
+     (if (eq? lst '()) 
+         '()
+      (if (eq? dup-count '())
+          lst
+          (duplicate-items-assist lst dup-count '()))
+      )
+   )
+)
+
+
+
+(define payment
+  (lambda (n coins-lst)
+        (if (= n 0) 
+            1
+            (if (eq? coins-lst '())
+               0
+               (payment-assist n coins-lst)))))
+
+(define remove-all
+  (lambda (x lst)
+    (if (eq? lst '())
+        lst
+        (if (eq? (car lst) x)
+            (remove-all x (cdr lst))
+            (cons (car lst) (remove-all x (cdr lst)))))))
+
+(define payment-assist
+  (lambda (n coins-lst)
+        (if (= n 0)
+            1
+            (if (< n 0) 
+                0
+                (if (eq? coins-lst '())
+                  0
+                  (+ (payment-assist (- n (car coins-lst)) (cdr coins-lst)) (payment-assist n (remove-all (car coins-lst) (cdr coins-lst)))))))))
+                    
+                  
+        
+                    
+        
+
+                    
+        
+                       
+(define compose-n
+  (lambda( f n)
+        (if (= n 0)
+            0
+            (if (= n 1)
+                f
+                (lambda (x) 
+                  (f ((compose-n f (- n 1)) x)))))))     
